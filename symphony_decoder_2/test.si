@@ -1,6 +1,6 @@
 def get_input($scratch_space: [Int], tick: Int, $inputs: [Int]) {
 
-    inputs[0] = random(0xffffffff)
+    inputs[0] = random(0x10000000000)
 
 }
 
@@ -9,9 +9,9 @@ def check_output($scratch_space: [Int], tick: Int, inputs: [Int], outputs: [Int]
     let instruction     =  inputs[0]
     let mode            = (instruction >> 29) & 0b11
     let opcode          = (instruction >> 24) & 0b1111
-    let dest            = (instruction >> 37) << 4 | ((instruction >> 20) & 0b1111)
-    let a               = (instruction >> 34) << 4 | ((instruction >> 16) & 0b1111)
-    let b               = (instruction >> 31) << 4 | ((instruction >>  8) & 0b1111)
+    let dest            = ((instruction >> 37) & 0b111) << 4 | ((instruction >> 20) & 0b1111)
+    let a               = ((instruction >> 34) & 0b111) << 4 | ((instruction >> 16) & 0b1111)
+    let b               = ((instruction >> 31) & 0b111) << 4 | ((instruction >>  8) & 0b1111)
     let immediate       = (instruction >> 28) & 1
     let immediate_value =  instruction & 0xffff
 

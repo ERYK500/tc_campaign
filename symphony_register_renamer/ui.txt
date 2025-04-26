@@ -1,1 +1,1 @@
-[text id="description" text="Check if we can execute both instructions simultaniously" size=24 y=80]
+[text id="description" text="Rename Destination, Argument A & Argument B registers" size=24 y=80]

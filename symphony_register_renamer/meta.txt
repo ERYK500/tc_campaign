@@ -5,6 +5,12 @@ background = 6
 copy_solution_to_factory = "Symphony/Allegro/out_of_order/renamer"
 input_labels = ["Load count", "Instruction A", "Instruction B", "Instruction C", "Counter"]
 output_labels = ["Renamed A", "Renamed B", "Renamed C"]
+add_components = [com_probe_memory_word: -1]
 dialogue = [
-    (alien, ``),
+    (alien, `The next thing you'll implement is register renaming.
+
+This process allows the CPU to execute instructions, even if they are encoded to store to the same register, which increases the throughput of the CPU.`),
+    (alien, `In order to accomplish this, we will use the bits 2-4 from the counter input to generate 3 bit prefixes that will extend the register's addresses already present in the instruction encoding.`),
+    (info, `For every instruction you need to generate a prefix for the destination register and store it for future use while retrieving the prefixes for the 2 argument operands that were stored previously (or were initialized '0'), in the order from instruction A to C, including the changes made to the prefix table in the same tick, made by instructions earlier in the mentioned order.`)
+    (alien, `Also don't rename 'zr' as it is an unnecessary waste of circuitry and instead just always set it's prefix to '0'.`)
 ]

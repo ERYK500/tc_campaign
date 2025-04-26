@@ -5,26 +5,24 @@ copy_solution_to_factory = "Symphony/Allegro/out_of_order/dec"
 input_labels = ["Instruction"]
 output_labels = ["Mode", "Opcode", "Destination", "Arg A", "Arg B", "Is immediate", "Immediate value"]
 background = 6
-unlocks_components = [com_static_indexer, com_static_indexer_config]
+components_available = [com_static_indexer: 10, com_concatenator_2: 3]
 dialogue = [
   (info, `
-Build a circuit that splits Symphony instructions into their different parts. This will be very helpful later.
+Build an alternate version of the circuit you made that splits Symphony instructions into their different parts, but this time merge the register rename prefixes together with the register indexes, you were already outputting from the component.
 
 There are two encodings for Symphony instructions, depending on whether we are using immediate values or not:
 
-[code][color=#ff9800]M[/color] = Mode
-[color=#ff6680]O[/color] = Opcode
-[color=#9966ff]I[/color] = Immediate bit
-[color=#ffe666]D[/color] = Destination register
-[color=#66ff99]A[/color] = Argument A
-[color=#66ccff]B[/color] = Argument B (possibly immediate)
-[color=#bbbbbb]0[/color] = Unused / zero[/code]
+[code] [color=#ff9800]M[/color]  = Mode
+ [color=#ff6680]O[/color]  = Opcode
+[color=#9966ff]0[/color]/[color=#9966ff]1[/color] = Is argument B an immediate value bit
+ [color=#ffe666]D[/color]  = Destination register
+ [color=#66ff99]A[/color]  = Argument A
+ [color=#66ccff]B[/color]  = Argument B (possibly immediate)
+ [color=#bbbbbb]0[/color]  = Unused / zero[/code]
 
-[code][color=#bbbbbb]0[/color][color=#ff9800]MM[/color][color=#bbbbbb]0[/color][color=#ff6680]OOOO[/color] [color=#ffe666]DDDD[/color][color=#66ff99]AAAA[/color] [color=#bbbbbb]0000[/color][color=#66ccff]BBBB[/color] [color=#bbbbbb]00000000[/color][/code]
-
-[code][color=#bbbbbb]000[/color][color=#9966ff]I[/color][color=#ff6680]OOOO[/color] [color=#bbbbbb]0[/color][color=#ffe666]DDD[/color][color=#bbbbbb]0[/color][color=#66ff99]AAA[/color] [color=#66ccff]BBBBBBBB BBBBBBBB[/color][/code]
+Instruction encoding if argument B is not an immediate value:
+[code][color=#ffe666]DDD[/color][color=#66ff99]AAA[/color][color=#66ccff]BB B[/color][color=#ff9800]MM[/color][color=#9966ff]0[/color][color=#ff6680]OOOO[/color] [color=#ffe666]DDDD[/color][color=#66ff99]AAAA[/color] [color=#bbbbbb]0000[/color][color=#66ccff]BBBB[/color] [color=#bbbbbb]00000000[/color][/code]
+Instruction encoding if argument B is an immediate value:
+[code][color=#ffe666]DDD[/color][color=#66ff99]AAA[/color][color=#bbbbbb]00 0[/color][color=#ff9800]MM[/color][color=#9966ff]1[/color][color=#ff6680]OOOO[/color] [color=#ffe666]DDDD[/color][color=#66ff99]AAAA[/color] [color=#66ccff]BBBBBBBB BBBBBBBB[/color][/code]
   `),
-  (info, `Use the static indexer component to solve this level. 
-
-The static indexer component is a special component that allows you to shift certain bits from a wire, without any delay or gates cost. Changing the number on the component will shift bits (positive number shifts to the right). Then click on the component to set the output width.`),
 ]

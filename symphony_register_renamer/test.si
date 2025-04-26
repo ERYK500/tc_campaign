@@ -155,20 +155,23 @@ def get_random_instruction() Int {
 
         OP_IO {
 
-            switch random(3) 
+            let opcode = random(10)
+
+            switch opcode
                 0 { return 0 }
-                1 { return OP_IO << 29 | d_vec }
-                2 { return OP_IO << 29 | 1 << 24 | a_vec }
+                2 { return OP_IO << 29 | opcode << 24 | b_vec }
+                3 { return OP_IO << 29 | opcode << 24 | b_vec }
+                default { return OP_IO << 29 | opcode << 24 | d_vec }
 
         }
 
         OP_ALU {
 
-            let opcode = random(10)
+            let opcode = random(11)
 
             if opcode == 9 {
 
-                return OP_ALU << 29 | opcode << 24 | 6 << 20 | a_vec | b_vec
+                return OP_ALU << 29 | opcode << 24 | 15 << 20 | a_vec | b_vec
 
             }
 
@@ -178,9 +181,9 @@ def get_random_instruction() Int {
         
         OP_RAM {
 
-            let opcode = random(2)
+            let opcode = random(8)
 
-            switch opcode
+            switch opcode & 1
                 0 {
 
                     return OP_RAM << 29 | opcode << 24 | d_vec | b_vec
@@ -188,7 +191,7 @@ def get_random_instruction() Int {
                 }
                 1 {
 
-                    return OP_RAM << 29 | opcode << 24 | 1 << 24 | b_vec | a_vec
+                    return OP_RAM << 29 | opcode << 24 | b_vec | a_vec
 
                 }
 
@@ -201,7 +204,7 @@ def get_random_instruction() Int {
                 opcode = random(14)
             }
 
-            return OP_JMP << 29 | opcode << 24 | 0b111 << 20 | ((b_vec >> 2) << 2) 
+            return OP_JMP << 29 | opcode << 24 | 0b1111 << 20 | ((b_vec >> 2) << 2) 
 
         }
 
@@ -235,41 +238,52 @@ def check_output($scratch_space: [Int], tick: Int, inputs: [Int], outputs: [Int]
     {
         let instruction = inputs[1]
 
+        let d = (instruction >> 20) & 0b1111
         let a = (instruction >> 16) & 0b1111
         let b = (instruction >> 8 ) & 0b1111
-        let correct_a = scratch_space[a]
-        let correct_b = scratch_space[b]
+        let correct_a = scratch_space[a] * <Int>(<U2>(a != 0))
+        let correct_b = scratch_space[b] * <Int>(<U2>(b != 0))
 
         let actual_d =  outputs[0] >> 37
         let actual_a = (outputs[0] >> 34 & 0b111)
         let actual_b = (outputs[0] >> 31 & 0b111)
 
-        let correct_d = base_d
+        let correct_d = base_d * <Int>(<U2>(d != 0))
+
+        if (a == 0 && actual_a != 0) || (b == 0 && actual_b != 0) || (d == 0 && actual_d != 0) {
+            set_error(`Don't rename 'zr'. The mismatch appeared in the first instruction.`)
+            return fail
+        }
 
         if correct_d != actual_d {
 
-            set_error(`In the first instruciton, the 3 bits from 37 to 40 should be the register prefix for the destination. That is supposed to be {correct_d}, not {actual_d}.`)
+            set_error(`In the first instruction, the 3 bits from 37 to 40 should be the register prefix for the destination. That is supposed to be {correct_d}, not {actual_d}.`)
             return fail
 
         }
 
         if correct_a != actual_a {
 
-            set_error(`In the first instruciton, the 3 bits from 34 to 36 should be the register prefix for argument A. That is supposed to be {correct_a}, not {actual_a}.`)
+            set_error(`In the first instruction, the 3 bits from 34 to 36 should be the register prefix for argument A. That is supposed to be {correct_a}, not {actual_a}.`)
             return fail
 
         }
 
         if correct_b != actual_b {
 
-            set_error(`In the first instruciton, the 3 bits from 31 to 33 should be the register prefix for argument B. That is supposed to be {correct_b}, not {actual_b}.`)
+            set_error(`In the first instruction, the 3 bits from 31 to 33 should be the register prefix for argument B. That is supposed to be {correct_b}, not {actual_b}.`)
             return fail
 
         }
 
+        if (instruction & 0x7FFFFFFF) != (outputs[0] & 0x7FFFFFFF) {
+
+            set_error(`You need to copy the 31 bits of the first instruction over to the first output.`)
+            return fail
+        }
+
         if exe_count > 0 {
 
-            let d = instruction >> 20 & 0b1111
             scratch_space[d] = correct_d
 
         }
@@ -279,41 +293,52 @@ def check_output($scratch_space: [Int], tick: Int, inputs: [Int], outputs: [Int]
     {
         let instruction = inputs[2]
 
+        let d = (instruction >> 20) & 0b1111
         let a = (instruction >> 16) & 0b1111
         let b = (instruction >> 8 ) & 0b1111
-        let correct_a = scratch_space[a]
-        let correct_b = scratch_space[b]
+        let correct_a = scratch_space[a] * <Int>(<U2>(a != 0))
+        let correct_b = scratch_space[b] * <Int>(<U2>(b != 0))
 
         let actual_d =  outputs[1] >> 37
         let actual_a = (outputs[1] >> 34 & 0b111)
         let actual_b = (outputs[1] >> 31 & 0b111)
 
-        let correct_d = (base_d + 1) & 0b111
+        let correct_d = ((base_d + 1) & 0b111) * <Int>(<U2>(d != 0))
+
+        if (a == 0 && actual_a != 0) || (b == 0 && actual_b != 0) || (d == 0 && actual_d != 0) {
+            set_error(`Don't rename 'zr'. The mismatch appeared in the second instruction.`)
+            return fail
+        }
 
         if correct_d != actual_d {
 
-            set_error(`In the second instruciton, the 3 bits from 37 to 40 should be the register prefix for the destination. That is supposed to be {correct_d}, not {actual_d}.`)
+            set_error(`In the second instruction, the 3 bits from 37 to 40 should be the register prefix for the destination. That is supposed to be {correct_d}, not {actual_d}.`)
             return fail
 
         }
 
         if correct_a != actual_a {
 
-            set_error(`In the second instruciton, the 3 bits from 34 to 36 should be the register prefix for argument A. That is supposed to be {correct_a}, not {actual_a}.`)
+            set_error(`In the second instruction, the 3 bits from 34 to 36 should be the register prefix for argument A. That is supposed to be {correct_a}, not {actual_a}.`)
             return fail
 
         }
 
         if correct_b != actual_b {
 
-            set_error(`In the second instruciton, the 3 bits from 31 to 33 should be the register prefix for argument B. That is supposed to be {correct_b}, not {actual_b}.`)
+            set_error(`In the second instruction, the 3 bits from 31 to 33 should be the register prefix for argument B. That is supposed to be {correct_b}, not {actual_b}.`)
             return fail
 
         }
 
+        if (instruction & 0x7FFFFFFF) != (outputs[1] & 0x7FFFFFFF) {
+
+            set_error(`You need to copy the 31 bits of the second instruction over to the second output.`)
+            return fail
+        }
+
         if exe_count > 1 {
 
-            let d = instruction >> 20 & 0b1111
             scratch_space[d] = correct_d
 
         }
@@ -323,59 +348,91 @@ def check_output($scratch_space: [Int], tick: Int, inputs: [Int], outputs: [Int]
     {
         let instruction = inputs[3]
 
+        let d = (instruction >> 20) & 0b1111
         let a = (instruction >> 16) & 0b1111
         let b = (instruction >> 8 ) & 0b1111
-        let correct_a = scratch_space[a]
-        let correct_b = scratch_space[b]
+        let correct_a = scratch_space[a] * <Int>(<U2>(a != 0))
+        let correct_b = scratch_space[b] * <Int>(<U2>(b != 0))
 
         let actual_d =  outputs[2] >> 37
         let actual_a = (outputs[2] >> 34 & 0b111)
         let actual_b = (outputs[2] >> 31 & 0b111)
 
-        let correct_d = (base_d + 2) & 0b111
+        let correct_d = ((base_d + 2) & 0b111) * <Int>(<U2>(d != 0))
+
+        if (a == 0 && actual_a != 0) || (b == 0 && actual_b != 0) || (d == 0 && actual_d != 0) {
+            set_error(`Don't rename 'zr'. The mismatch appeared in the third instruction.`)
+            return fail
+        }
 
         if correct_d != actual_d {
 
-            set_error(`In the third instruciton, the 3 bits from 37 to 40 should be the register prefix for the destination. That is supposed to be {correct_d}, not {actual_d}.`)
+            set_error(`In the third instruction, the 3 bits from 37 to 40 should be the register prefix for the destination. That is supposed to be {correct_d}, not {actual_d}.`)
             return fail
 
         }
 
         if correct_a != actual_a {
 
-            set_error(`In the third instruciton, the 3 bits from 34 to 36 should be the register prefix for argument A. That is supposed to be {correct_a}, not {actual_a}.`)
+            set_error(`In the third instruction, the 3 bits from 34 to 36 should be the register prefix for argument A. That is supposed to be {correct_a}, not {actual_a}.`)
             return fail
 
         }
 
         if correct_b != actual_b {
 
-            set_error(`In the third instruciton, the 3 bits from 31 to 33 should be the register prefix for argument B. That is supposed to be {correct_b}, not {actual_b}.`)
+            set_error(`In the third instruction, the 3 bits from 31 to 33 should be the register prefix for argument B. That is supposed to be {correct_b}, not {actual_b}.`)
             return fail
 
         }
 
+        if (instruction & 0x7FFFFFFF) != (outputs[2] & 0x7FFFFFFF) {
+
+            set_error(`You need to copy the 31 bits of the third instruction over to the third output.`)
+            return fail
+        }
+
         if exe_count > 2 {
 
-            let d = instruction >> 20 & 0b1111
             scratch_space[d] = correct_d
 
         }
 
     }
 
-    var addr = 0
+    if has_ram() {
 
-    while addr < 16 {
+        var addr = 0
 
-        if get_ram_value(addr) != scratch_space[addr] {
+        while addr < 16 {
 
-            set_error(`The RAM is supposed to have value {scratch_space[addr]} at address {addr}.`)
-            return fail
+            if get_ram_value(addr) != scratch_space[addr] {
+
+                set_error(`The RAM is supposed to have the value {scratch_space[addr]} at address {addr}.`)
+                return fail
+
+            }
+
+            addr += 1
 
         }
 
-        addr += 1
+    } else {
+
+        var reg_idx = 1
+
+        while reg_idx < 16 {
+
+            if get_level_memory(`r{reg_idx} prefix`) != scratch_space[reg_idx] {
+
+                set_error(`The 'r{reg_idx} prefix' non-addressable memory (or memory probe) component is supposed to have the value {scratch_space[reg_idx]},\nor add a RAM component to store register prefixes instead.`)
+                return fail
+
+            }
+
+            reg_idx += 1
+
+        }
 
     }
 

@@ -1,1 +1,1 @@
-[text id="description" text="Implement the Symphony decoder" size=24 y=90]
+[text id="description" text="Implement the register renamed version of the Symphony decoder" size=24 y=90]
