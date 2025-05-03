@@ -122,11 +122,11 @@ XOR %b and %c and store the result in %a.
 
 lsl %a(register), %b(register), %c(register)
 00100111 aaaabbbb 0000cccc 00000000
-LSL %b and %c and store the result in %a.
+Left shift %b by %c and store the result in %a.
 
 lsr %a(register), %b(register), %c(register)
 00101000 aaaabbbb 0000cccc 00000000
-LSR %b and %c and store the result in %a.
+Right shift %b by %c and store the result in %a.
 
 cmp %a(register), %b(register)
 00101001 1111aaaa 0000bbbb 00000000
@@ -167,11 +167,11 @@ XOR %b and %c and store the result in %a.
 
 lsl %a(register), %b(register), %c(immediate)
 00110111 aaaabbbb cccccccc cccccccc
-LSL %b and %c and store the result in %a.
+Left shift %b by %c and store the result in %a.
 
 lsr %a(register), %b(register), %c(immediate)
 00111000 aaaabbbb cccccccc cccccccc
-LSR %b and %c and store the result in %a.
+Right shift %b by %c and store the result in %a.
 
 cmp %a(register), %b(immediate)
 00111001 1111aaaa bbbbbbbb bbbbbbbb

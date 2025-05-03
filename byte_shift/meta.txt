@@ -6,12 +6,12 @@ input_values = [("VALUE", "SHIFT BY")]
 dialogue = [
   (info_centered, `To [color=#e49f44]shift[/color] a value 1 left just means moving all the bits in a byte to the left by 1 position.
 For example: [color=#e49f44]90 lsl 1[/color]
-
-[OFF] [ON] [OFF] [ON] [ON] [OFF] [ON] [OFF] would become:
+[OFF] [ON] [OFF] [ON] [ON] [OFF] [ON] [OFF]
+would become:
 [ON] [OFF] [ON] [ON] [OFF] [ON] [OFF] [OFF]
-
 Shifting by 3: [color=#e49f44]90 lsl 3[/color]
-[OFF] [ON] [OFF] [ON] [ON] [OFF] [ON] [OFF] would become:
+[OFF] [ON] [OFF] [ON] [ON] [OFF] [ON] [OFF]
+would become:
 [ON] [ON] [OFF] [ON] [OFF] [OFF] [OFF] [OFF]
 
 `),
