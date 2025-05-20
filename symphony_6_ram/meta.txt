@@ -30,17 +30,16 @@ And the encoding looks like this:
 Instruction encoding if argument B is not an immediate value:
 [code][color=#bbbbbb]0[/color][color=#ff9800]MM[/color][color=#9966ff]0[/color][color=#ff6680]OOOO[/color] [color=#ffe666]DDDD[/color][color=#66ff99]AAAA[/color] [color=#bbbbbb]0000[/color][color=#66ccff]BBBB[/color] [color=#bbbbbb]00000000[/color][/code]
 Instruction encoding if argument B is an immediate value:
-[code][color=#bbbbbb]0[/color][color=#ff9800]MM[/color][color=#9966ff]1[/color][color=#ff6680]OOOO[/color] [color=#ffe666]DDDD[/color][color=#66ff99]AAAA[/color] [color=#66ccff]BBBBBBBB BBBBBBBB[/color][/code]
-
-In this level we implement the RAM mode. There are two opcodes in this mode:
+[code][color=#bbbbbb]0[/color][color=#ff9800]MM[/color][color=#9966ff]1[/color][color=#ff6680]OOOO[/color] [color=#ffe666]DDDD[/color][color=#66ff99]AAAA[/color] [color=#66ccff]BBBBBBBB BBBBBBBB[/color][/code]`)
+    (info, In this level we implement the RAM mode. For now, there are four opcodes in this mode:
 [code]0 load_8
 1 store_8
 2 load_16
 3 store_16[/code]
 
-The 'load' instructions should load the value at address [color=#66ccff]argument B[/color] and store the result in [color=#ffe666]destination[/color].
+The 'load' instructions should load the value from program memory at address [color=#66ccff]argument B[/color] and store the result in the [color=#ffe666]destination[/color] register.
 
-The 'store' instructions should store [color=#66ccff]argument A[/color] at address [color=#66ccff]argument B[/color].
+The 'store' instructions should store the value in the [color=#66ccff]argument A[/color] register to program memory at address [color=#66ccff]argument B[/color].
 
 The numerical suffix determines the width in bits of how many bits should be written to or read from memory, so a load_8 instruction should load 8 bits of data & a store_16 should store 16 bits of data starting at that address.
 `),

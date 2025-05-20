@@ -10,9 +10,9 @@ add_components = [com_ssd: -1]
 dialogue = [
     (info, `In this level we add an SSD component, which functions like RAM but can store data between restarts (when used in the sandbox). Place the SSD and set the byte size to 65536.
 
-Then add four new memory instructions 'pload_8', 'pstore_8', 'pload_16' and 'pstore_16', which should function like the load and store instructions from the previous level, but using the SSD.
+Then add four new memory instructions 'pload_8', 'pstore_8', 'pload_16' and 'pstore_16', which should function like the load and store instructions from the previous level, but accessing the SSD instead of the program memory.
 
-This is the new opcode encodings when in memory mode.
+These are all of the opcode encodings when in memory mode:
 [code]0 load_8
 1 store_8
 2 load_16
@@ -20,9 +20,7 @@ This is the new opcode encodings when in memory mode.
 4 pload_8
 5 pstore_8
 6 pload_16
-7 pstore_16[/code]
-
-`),
+7 pstore_16[/code]`),
 ]
 default_isa_spec = `
 
