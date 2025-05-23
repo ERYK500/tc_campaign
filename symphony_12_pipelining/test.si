@@ -437,6 +437,11 @@ def get_input($scratch_space: [Int], tick: Int, $inputs: [Int]) {
 
 }
 
+def get_correct_program_output() Int {
+    let addr = get_program_address()
+    return ((<Int> get_ram_value(addr)) << 24) | ((<Int> get_ram_value(addr + 1)) << 16) | ((<Int> get_ram_value(addr + 2)) << 8) | (<Int> get_ram_value(addr + 3))
+}
+
 def check_output($scratch_space: [Int], tick: Int, inputs: [Int], outputs: [Int]) TestResult {
 
     if tick == 0 {
@@ -488,7 +493,11 @@ def check_output($scratch_space: [Int], tick: Int, inputs: [Int], outputs: [Int]
     scratch_space[COUNTER_2] = scratch_space[COUNTER_1]
     scratch_space[COUNTER_1] = scratch_space[COUNTER_0]
 
-    let instruction_0 = get_program_output()
+    let instruction_0 = get_correct_program_output()
+    if get_program_output() != instruction_0 {
+        set_error(`The read instruction does not match the instruction that's at the current address!\nCheck if your instruction load port is 32 bit & is enabled.`)
+        return fail
+    }
     scratch_space[INSTRUCTION_2] = scratch_space[INSTRUCTION_1]
     scratch_space[INSTRUCTION_1] = scratch_space[INSTRUCTION_0]
     scratch_space[INSTRUCTION_0] = instruction_0
