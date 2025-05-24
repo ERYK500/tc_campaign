@@ -11,10 +11,10 @@ dialogue = [
 As I mentioned before, superscalar means we are executing more than one instruction per tick, in this case two.`),
   (info, `These are the things you need to do to add the second pipeline:
 
-1. Make the assembler 64 bit and split the output into two instructions
+1. Make the instruction load port on the program memory 64 bit and split the output into two instructions
 2. Add the data hazard component. When it is [ON] (and the JUMP timer is [OFF]) we can execute the second instruction
 3. Place the updated counter
-4. Updated the register file
+4. Duplicate the store & load ports on the register file, with the store ports next to one another & the new one [i]below[/i] the other one & the load ports below the existing ones.
 5. Add a second ALU and wire everything together for the second pipeline
 `)]
 default_isa_spec = `
