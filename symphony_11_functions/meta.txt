@@ -290,7 +290,7 @@ pload_8 %dest(register), [%address(immediate)]
 01110100 dddd0000 aaaaaaaa aaaaaaaa
 Loads %address from SSD and stores it to %dest
 
-pstore_8 %address(register), %value(register)
+pstore_8 [%address(register)], %value(register)
 01100101 0000vvvv 0000aaaa 00000000
 Store %value to %address in SSD
 

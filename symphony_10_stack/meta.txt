@@ -243,7 +243,7 @@ Jump to %a if the first value was below (unsigned) the second (reading results f
 
 jae %a(immediate | label)
 01011010 00001111 aaaaaaaa aaaaaaaa
-Jump to %a if the first value was above (unsigned) or euqal to the second (reading results from 'flags').
+Jump to %a if the first value was above (unsigned) or equal to the second (reading results from 'flags').
 
 jbe %a(immediate | label)
 01010011 00001111 aaaaaaaa aaaaaaaa

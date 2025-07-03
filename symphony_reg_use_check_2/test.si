@@ -128,13 +128,13 @@ def get_random_wide_instruction() Int {
 
     let immediate = random(2) == 0
 
-    let d_vec = random(8) << 20
-    let a_vec = random(8) << 16
-    let b_vec = immediate ? 1 << 28 | random(0xffff) : random(8) << 8
+    let d_vec = random(16) << 20
+    let a_vec = random(16) << 16
+    let b_vec = immediate ? 1 << 28 | random(0xffff) : random(16) << 8
 
-    let d_ext = random(3) << 37
-    let a_ext = random(3) << 34
-    let b_ext = immediate ? 0 : random(3) << 31
+    let d_ext = random(8) << 37
+    let a_ext = random(8) << 34
+    let b_ext = immediate ? 0 : random(8) << 31
 
     switch mode
 

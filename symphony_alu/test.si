@@ -85,8 +85,8 @@ def get_input($scratch_space: [Int], tick: Int, $inputs: [Int]) {
         }
         9 { 
 
-            set_custom_input_text(`FLAGS`)
-            ui_set_text("description", `FLAGS {a}, {b} = {flag_result(a, b)}`) 
+            set_custom_input_text(`CMP`)
+            ui_set_text("description", `CMP {a}, {b} = {flag_result(a, b)}`) 
 
         }
         10 { 

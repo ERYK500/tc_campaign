@@ -85,8 +85,8 @@ def get_input($scratch_space: [Int], tick: Int, $inputs: [Int]) {
         }
         9 { 
 
-            set_custom_input_text(`FLAGS`)
-            ui_set_text("description", `FLAGS {a}, {b} = {flag_result(a, b)}`) 
+            set_custom_input_text(`CMP`)
+            ui_set_text("description", `CMP {a}, {b} = {flag_result(a, b)}`) 
 
         }
 
@@ -124,7 +124,7 @@ def check_output($scratch_space: [Int], tick: Int, inputs: [Int], outputs: [Int]
             6 { set_error(`{a} XOR {b} = {a ^ b}`) }
             7 { set_error(`{a} LSL {b} = {(a << b) & 0xffff}`) }
             8 { set_error(`{a} LSR {b} = {a >> b}`) }
-            9 { set_error(`FLAGS {a}, {b} = {flag_result(a, b)}`) }
+            9 { set_error(`CMP {a}, {b} = {flag_result(a, b)}`) }
 
         return fail
 

@@ -6,7 +6,7 @@ immutable_spec = true
 no_score = true
 copy_solution_to_level = ["symphony_7_ssd"]
 dialogue = [
-    (info, `In this level we add loading from and storing to the same memory that is used for the program. We want to be able to read and write both 16-bit words and 8-bit bytes, so add 2 store ports and 2 extra load ports to the RAM component. 
+    (info, `In this level we add loading from and storing to the same memory that is used for the program. We want to be able to read and write both 16-bit words and 8-bit bytes, so add 2 extra load ports and 2 store ports (below all 3 load ports) to the RAM component. 
 
 Set the width of top load port to 8, the middle one to 16 (these will be used for the new memory reading capability) and the bottom one to 32 (which will be used to read our instructions).
 
@@ -44,7 +44,7 @@ The 'store' instructions should store the value in the [color=#66ccff]argument A
 The numerical suffix determines the width in bits of how many bits should be written to or read from memory, so a load_8 instruction should load 8 bits of data & a store_16 should store 16 bits of data starting at that address.
 `),
     (info, `
-    TODO, write about store pins and ordering and why they must go on top or they will cause a circular dependency`),
+    TODO, write about store pins and ordering and why they must go on bottom or they will cause a circular dependency`),
 ]
 default_isa_spec = `
 

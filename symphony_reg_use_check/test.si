@@ -145,9 +145,9 @@ def get_random_instruction() Int {
 
     var mode = random(4)
 
-    let d_vec = random(8) << 20
-    let a_vec = random(8) << 16
-    let b_vec = random(2) == 0 ? 1 << 28 | random(0xffff) : random(8) << 8
+    let d_vec = random(16) << 20
+    let a_vec = random(16) << 16
+    let b_vec = random(2) == 0 ? 1 << 28 | random(0xffff) : random(16) << 8
 
     switch mode
 
