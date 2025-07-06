@@ -73,7 +73,7 @@ Stores the value of %a in the console offset register
 
 time_0 %a(register)
 00000100 aaaa0000 00000000 00000000
-Loads the first two bytes of the time value and stores it to %a
+Loads the two least significant bytes of the time value and stores it to %a
 
 time_1 %a(register)
 00000101 aaaa0000 00000000 00000000
@@ -85,7 +85,7 @@ Loads the third two bytes of the time value and stores it to %a
 
 time_3 %a(register)
 00000111 aaaa0000 00000000 00000000
-Loads the fourth two bytes of the time value and stores it to %a
+Loads the two most significant bytes of the time value and stores it to %a
 
 counter %a(register)
 00001000 aaaa0000 00000000 00000000

@@ -19,10 +19,10 @@ Also link the Console to RAM.
 1  in        Input
 2  out       Output
 3  console   Set the console offset
-4  time_0    Read the first 16 bits of time
+4  time_0    Read the least significant 16 bits of time
 5  time_1    Read the second 16 bits of time
 6  time_2    Read the third 16 bits of time
-7  time_3    Read the last 16 bits of time
+7  time_3    Read the most significant 16 bits of time
 8  counter   Read the counter value
 9  keyboard  Read the keyboard value
 [/code]
@@ -30,7 +30,7 @@ Also link the Console to RAM.
 The console interprets bytes in the RAM component it is connected to as ASCII characters (see manual) and displays them. The Console has an "Offset" input, which determines which byte it considers its first character. This can be useful for example for scrolling text or for only updating with a new screen of text once everything is ready (called double buffering).
 An update to the console offset should use argument B and persist until the next update.
 
-The Time component outputs the time in nano seconds since 1st of January 1970 (The Unix epoch) as a 64 bit number. Since this architecture only deals with 16 bits, the value is split into 4 parts that can be read separately. However, combining time values from two seperate ticks can actually produce values from the future or past, due to overflows. To avoid this issue, we only read the timer when executing "time_0" and store the result so "time_1", "time_2" and "time_3" can read it later. This means that "time_1", "time_2" and "time_3" should be 0 if "time_0" has not been executed yet.
+The Time component outputs the time in nano seconds since 1st of January 1970 (The Unix epoch) as a 64 bit number. Since this architecture only deals with 16 bits, the value is split into 4 parts that can be read separately. However, combining time values from two separate ticks can actually produce values from the future or past, due to overflows. To avoid this issue, we only read the timer when executing "time_0" and store the result so "time_1", "time_2" and "time_3" can read it later. This means that "time_1", "time_2" and "time_3" should be 0 if "time_0" has not been executed yet.
 
 The counter refers to the custom component that determines the offset the Assembler reads from. This should read the current offset.
 
@@ -97,7 +97,7 @@ Stores the value of %a in the console offset register
 
 time_0 %a(register)
 00000100 aaaa0000 00000000 00000000
-Loads the first two bytes of the time value and stores it to %a
+Loads the two least significant bytes of the time value and stores it to %a
 
 time_1 %a(register)
 00000101 aaaa0000 00000000 00000000
@@ -109,7 +109,7 @@ Loads the third two bytes of the time value and stores it to %a
 
 time_3 %a(register)
 00000111 aaaa0000 00000000 00000000
-Loads the fourth two bytes of the time value and stores it to %a
+Loads the two most significant bytes of the time value and stores it to %a
 
 counter %a(register)
 00001000 aaaa0000 00000000 00000000
