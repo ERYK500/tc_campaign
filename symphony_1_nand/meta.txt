@@ -56,7 +56,7 @@ This is how the instructions are encoded:
 
 [code][color=#bbbbbb]0[/color][color=#ff9800]MM[/color][color=#bbbbbb]0[/color][color=#ff6680]OOOO[/color] [color=#ffe666]DDDD[/color][color=#66ff99]AAAA[/color] [color=#bbbbbb]0000[/color][color=#66ccff]BBBB[/color] [color=#bbbbbb]00000000[/color][/code]
 
-Use the decoder to separate the destination and argument registers. Also, in this level the [color=#ff9800]Mode[/color] is always 3 and the [color=#ff6680]Opcode[/color] is always 0. This means we NAND the first argument with the second and store the result to the result register. 
+Use the decoder to separate the destination and argument registers. Also, in this level the [color=#ff9800]Mode[/color] is always 1 and the [color=#ff6680]Opcode[/color] is always 0. This means we NAND the first argument with the second and store the result to the result register. For now you can just use a 16 bit NAND gate in place of the ALU.
 
 
 [img]dialogue/symphony_diagram_1.png[/img]

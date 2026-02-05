@@ -42,7 +42,7 @@ def arch_get_input($scratch_space: [Int], test: Int) Int {
 
 }
 
-def arch_check_output($scratch_space: [Int], test: Int, input: Int, output: Int) TestResult {
+def on_tick($scratch_space: [Int], test: Int, inputs: [Int], outputs: [Int]) TestResult {
 
     if scratch_space[INPUT_CURSOR] > 16 {
 
@@ -50,6 +50,10 @@ def arch_check_output($scratch_space: [Int], test: Int, input: Int, output: Int)
         return fail
 
     }
+
+}
+
+def arch_check_output($scratch_space: [Int], test: Int, input: Int, output: Int) TestResult {
 
     let cursor = scratch_space[OUTPUT_CURSOR]
     scratch_space[OUTPUT_CURSOR] += 1
